@@ -3,6 +3,7 @@ package edu.austral.ingsis.clifford.command;
 import edu.austral.ingsis.clifford.structure.Directory;
 import edu.austral.ingsis.clifford.structure.SystemNode;
 import java.util.List;
+import java.util.stream.Collectors;
 
 // could add logic to one touch/mkdir command. but the design of directory could include links to
 // their parent
@@ -34,7 +35,7 @@ public class MkdirCommand implements Command {
 
     List<SystemNode> children = pwd.list();
     boolean hasRepeatedName =
-        !children.stream().filter(child -> child.getName().equals(dirName)).toList().isEmpty();
+        !children.stream().filter(child -> child.getName().equals(dirName)).collect(Collectors.toList()).isEmpty();
 
     return hasRepeatedName;
   }
