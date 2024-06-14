@@ -12,12 +12,12 @@ public class File implements SystemNode {
 
   @Override
   public String getName() {
-    return null;
+    return name;
   }
 
   @Override
   public String getPath() {
-    return null;
+    return path;
   }
 
   @Override

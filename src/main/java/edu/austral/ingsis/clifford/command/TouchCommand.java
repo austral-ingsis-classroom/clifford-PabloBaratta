@@ -2,8 +2,6 @@ package edu.austral.ingsis.clifford.command;
 
 import edu.austral.ingsis.clifford.structure.Directory;
 import edu.austral.ingsis.clifford.structure.File;
-import edu.austral.ingsis.clifford.structure.SystemNode;
-import java.util.List;
 
 public class TouchCommand implements Command {
 
@@ -18,14 +16,17 @@ public class TouchCommand implements Command {
 
   @Override
   public String execute() {
+    /*
     if (checkIfPossibleDuplicates(fileName, pwd)) {
       return REPEATED_NAME;
-    }
-    File file = new File(pwd.getPath() + "/" + pwd.getName(), fileName);
+    }*/
+    File file = new File(pwd.getPath() + pwd.getName() + "/", fileName);
+    pwd.deleteNode(fileName);
     pwd.addNode(file);
-    return "'" + fileName + "'" + "file created";
+    return "'" + fileName + "'" + " file created";
   }
-
+  // apparently file has to be overwritten?
+  /*
   private boolean checkIfPossibleDuplicates(String fileName, Directory pwd) {
 
     List<SystemNode> children = pwd.list();
@@ -33,5 +34,5 @@ public class TouchCommand implements Command {
         !children.stream().filter(child -> child.getName().equals(fileName)).toList().isEmpty();
 
     return hasRepeatedName;
-  }
+  }*/
 }

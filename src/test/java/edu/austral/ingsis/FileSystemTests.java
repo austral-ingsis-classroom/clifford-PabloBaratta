@@ -19,6 +19,14 @@ public class FileSystemTests {
     final List<String> expectedResult =
         commandsAndResults.stream().map(Map.Entry::getValue).toList();
 
+    final FileSystemRunner runner = getFileSystemRunner();
+
+    final List<String> actualResult = runner.executeCommands(commands);
+
+    assertEquals(expectedResult, actualResult);
+  }
+
+  private static FileSystemRunner getFileSystemRunner() {
     final Map<String, CommandParser> comms =
         Map.of(
             "cd",
@@ -27,14 +35,15 @@ public class FileSystemTests {
             new ListParser(),
             "touch",
             new TouchParser(),
+            "mkdir",
+            new MkdirParser(),
             "pwd",
-            new PwdParser());
+            new PwdParser(),
+            "rm",
+            new RemoveParser());
     final FileSystem fileSystem = new FileSystem(new Directory("", "/"));
     final FileSystemRunner runner = new Runner(fileSystem, comms);
-
-    final List<String> actualResult = runner.executeCommands(commands);
-
-    assertEquals(expectedResult, actualResult);
+    return runner;
   }
 
   @Test
@@ -61,8 +70,7 @@ public class FileSystemTests {
             entry("pwd", "/emily"),
             entry("touch elizabeth.txt", "'elizabeth.txt' file created"),
             entry("mkdir t-bone", "'t-bone' directory created"),
-            entry("ls", "elizabeth t-bone")
-    ));
+            entry("ls", "elizabeth.txt t-bone"))); // extension should be printed
   }
 
   @Test
@@ -77,7 +85,7 @@ public class FileSystemTests {
             entry("mkdir t-bone", "'t-bone' directory created"),
             entry("touch elizabeth.txt", "'elizabeth.txt' file created"),
             entry("ls", "t-bone elizabeth.txt"),
-            entry("rm", "cannot remove 't-bone', is a directory"),
+            entry("rm t-bone", "cannot remove 't-bone', is a directory"), // missing parameter
             entry("rm --recursive t-bone", "'t-bone' removed"),
             entry("ls", "elizabeth.txt"),
             entry("rm elizabeth.txt", "'elizabeth.txt' removed"),
@@ -131,7 +139,7 @@ public class FileSystemTests {
             entry("mkdir emily", "'emily' directory created"),
             entry("cd emily", "moved to directory 'emily'"),
             entry("mkdir emily", "'emily' directory created"),
-            entry("touch horace.txt", "'horace.txt' file created"),
+            entry("touch emily.txt", "'emily.txt' file created"),
             entry("touch jetta.txt", "'jetta.txt' file created"),
             entry("ls", "emily emily.txt jetta.txt"),
             entry("rm --recursive emily", "'emily' removed"),

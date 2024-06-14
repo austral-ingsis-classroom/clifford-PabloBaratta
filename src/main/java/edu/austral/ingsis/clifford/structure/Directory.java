@@ -11,7 +11,7 @@ public class Directory implements SystemNode {
   public Directory(String path, String name) {
     this.name = name;
     this.path = path;
-    this.nodes = new HashMap<>();
+    this.nodes = new LinkedHashMap<>();
   }
 
   @Override

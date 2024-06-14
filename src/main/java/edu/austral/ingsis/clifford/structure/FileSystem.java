@@ -23,5 +23,6 @@ public class FileSystem {
 
   public FileSystem(Directory root) {
     this.root = root;
+    this.pwd = root;
   }
 }

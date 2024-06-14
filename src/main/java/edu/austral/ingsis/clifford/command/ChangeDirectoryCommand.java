@@ -11,7 +11,7 @@ public class ChangeDirectoryCommand implements Command {
   private final FileSystem fs;
   private final boolean fromRoot;
 
-  private static final String MESSAGE = "Moved to directory:";
+  private static final String MESSAGE = "moved to directory ";
 
   public ChangeDirectoryCommand(String[] path, FileSystem fs, boolean fromRoot) {
     this.path = path;
@@ -26,6 +26,9 @@ public class ChangeDirectoryCommand implements Command {
 
   private String navigate(String[] path, FileSystem fs, boolean fromRoot) {
     Directory from = fromRoot ? fs.getRoot() : fs.getPwd();
+    if (path.length == 0) {
+      fs.setPwd(fs.getRoot());
+    }
     for (String s : path) {
       switch (s) {
         case ".":
@@ -40,16 +43,17 @@ public class ChangeDirectoryCommand implements Command {
         default:
           Optional<SystemNode> child = fs.getPwd().getChild(s);
           if (child.isEmpty() || !child.get().isComposite()) {
-            return "Couldn't find dir";
+            return "'" + s + "'" + " directory does not exist";
           }
           fs.setPwd((Directory) child.get());
+          break;
       }
     }
-    return MESSAGE + path[path.length - 1];
+    return MESSAGE + "'" + fs.getPwd().getName() + "'";
   }
 
   private Optional<Directory> findDirectory(String path, Directory root) {
-    if (path.isEmpty()) {
+    if (path.isEmpty() || path.equals("/")) {
       return Optional.of(root);
     }
     String[] split = path.split("/");

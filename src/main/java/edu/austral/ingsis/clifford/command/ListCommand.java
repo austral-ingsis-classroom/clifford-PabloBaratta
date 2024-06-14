@@ -21,9 +21,10 @@ public class ListCommand implements Command {
 
   @Override
   public String execute() {
-    if (sorter != null) {
-      return sorter.sort(dir.list()).stream().map(SystemNode::getName).toList().toString();
-    }
-    return dir.list().stream().map(SystemNode::getName).toList().toString();
+    String string =
+        sorter != null
+            ? sorter.sort(dir.list()).stream().map(SystemNode::getName).toList().toString()
+            : dir.list().stream().map(SystemNode::getName).toList().toString();
+    return string.substring(1, string.length() - 1).replace(",", "");
   }
 }
