@@ -10,14 +10,16 @@ import edu.austral.ingsis.clifford.structure.FileSystemRunner;
 import edu.austral.ingsis.clifford.structure.Runner;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.junit.jupiter.api.Test;
 
 public class FileSystemTests {
 
   private void executeTest(List<Map.Entry<String, String>> commandsAndResults) {
-    final List<String> commands = commandsAndResults.stream().map(Map.Entry::getKey).toList();
+    final List<String> commands = commandsAndResults.stream().map(Map.Entry::getKey).collect(Collectors.toList());
     final List<String> expectedResult =
-        commandsAndResults.stream().map(Map.Entry::getValue).toList();
+        commandsAndResults.stream().map(Map.Entry::getValue).collect(Collectors.toList());
 
     final FileSystemRunner runner = getFileSystemRunner();
 
