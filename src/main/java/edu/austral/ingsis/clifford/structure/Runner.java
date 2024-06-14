@@ -5,6 +5,7 @@ import edu.austral.ingsis.clifford.parser.CommandParser;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Runner implements FileSystemRunner {
 
@@ -18,7 +19,7 @@ public class Runner implements FileSystemRunner {
   }
 
   public List<String> executeCommands(List<String> commands) {
-    return commands.stream().map(this::executeCommand).toList();
+    return commands.stream().map(this::executeCommand).collect(Collectors.toList());
   }
 
   public String executeCommand(String line) {
